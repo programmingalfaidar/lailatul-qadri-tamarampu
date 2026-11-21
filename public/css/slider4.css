@@ -1,0 +1,224 @@
+:root{
+  --navy-deep:#0a2540;
+  --navy-mid:#123a63;
+  --navy-card:#153f6b;
+  --gold:#c9a227;
+  --gold-bright:#f4c430;
+  --ink-white:#f7f4ec;
+  --ink-dim:#9fb3cc;
+  --sched-h:15vh;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  margin:0; padding:0; width:100%; height:100%;
+  background:#000; overflow:hidden;
+  font-family:'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.frame{
+  position:absolute; inset:0;
+  display:flex;
+  background:var(--navy-deep);
+  border:14px solid var(--gold);
+  outline: 3px solid #7a5f14;
+  outline-offset:-14px;
+}
+
+/* ---------- BOTTOM: PRAYER SCHEDULE STRIP (melayang di atas video) ---------- */
+.schedule{
+  position:absolute; left:0; right:0; bottom:34px;
+  z-index:3;
+  height:var(--sched-h);
+  display:flex;
+  align-items:stretch;
+  gap:12px;
+  padding:12px 24px;
+  background:linear-gradient(180deg, rgba(10,37,64,.80), rgba(8,27,48,.96));
+  overflow:hidden;
+}
+
+.masjid-label{
+  display:flex; align-items:center;
+  width:9vw; min-width:120px;
+  flex-shrink:0;
+  color:var(--gold-bright);
+  font-size:0.85vw;
+  min-font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  text-align:left;
+  line-height:1.5;
+  font-weight:600;
+  opacity:.85;
+}
+
+.prayer-row{
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:linear-gradient(135deg, var(--navy-card), var(--navy-mid));
+  border-radius:10px;
+  padding:0 18px;
+  border-bottom:5px solid transparent;
+  position:relative;
+  transition:all .4s ease;
+}
+
+.prayer-row.active{
+  background:linear-gradient(135deg, #1c4d82, var(--navy-mid));
+  border-bottom:5px solid var(--gold-bright);
+  box-shadow:0 0 22px rgba(244,196,48,.25);
+}
+
+.prayer-icon{
+  width:2.6vw; min-width:34px; max-width:46px;
+  height:2.6vw; min-height:34px; max-height:46px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink-white);
+  flex-shrink:0;
+}
+.prayer-row.active .prayer-icon{ color:var(--gold-bright); }
+.prayer-icon svg{ width:100%; height:100%; }
+
+.prayer-text{ display:flex; flex-direction:column; line-height:1.05; }
+
+.prayer-name{
+  font-size:1.1vw;
+  min-font-size:14px;
+  color:var(--ink-dim);
+  font-weight:500;
+  letter-spacing:.02em;
+}
+.prayer-row.active .prayer-name{ color:var(--gold-bright); }
+
+.prayer-time{
+  font-size:2.1vw;
+  color:var(--ink-white);
+  font-weight:800;
+  letter-spacing:.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- RIGHT: VIDEO + OVERLAYS ---------- */
+.stage{
+  position:relative;
+  flex:1;
+  overflow:hidden;
+  background:#000;
+}
+
+video{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+}
+
+.top-overlay{
+  position:absolute; top:0; right:0;
+  padding:22px 34px;
+  text-align:right;
+  color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.65);
+  background:linear-gradient(180deg, rgba(0,0,0,.55), transparent);
+  width:100%;
+  pointer-events:none;
+}
+
+.clock{
+  font-size:4vw;
+  font-weight:800;
+  letter-spacing:.01em;
+  font-variant-numeric: tabular-nums;
+  line-height:1;
+}
+
+.date-line{
+  font-size:1.15vw;
+  margin-top:6px;
+  font-weight:500;
+}
+.date-line .dow{ color:var(--gold-bright); font-weight:700; }
+
+.hijri-line{
+  font-size:1.05vw;
+  color:var(--ink-dim);
+  margin-top:2px;
+}
+
+.bottom-overlay{
+  position:absolute; left:0; right:0; bottom:calc(34px + var(--sched-h));
+  background:linear-gradient(0deg, rgba(0,0,0,.55), transparent);
+  color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.65);
+  padding:16px 30px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.masjid-info{ display:flex; align-items:center; gap:16px; }
+
+.masjid-badge{
+  width:3.4vw; min-width:44px; max-width:60px;
+  height:3.4vw; min-height:44px; max-height:60px;
+  border-radius:50%;
+  background:var(--navy-deep);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--gold-bright);
+  flex-shrink:0;
+}
+.masjid-badge svg{ width:60%; height:60%; }
+
+.masjid-name{
+  font-size:1.7vw;
+  font-weight:800;
+  color:#fff;
+  margin:0;
+}
+.masjid-name .accent{ color:var(--gold-bright); }
+
+.masjid-address{
+  font-size:.85vw;
+  color:var(--ink-white);
+  opacity:.85;
+  margin-top:2px;
+}
+
+.next-prayer-pill{
+  display:flex; align-items:center; gap:8px;
+  background:var(--navy-deep);
+  color:#fff;
+  padding:9px 18px;
+  border-radius:999px;
+  font-size:1vw;
+  font-weight:700;
+  white-space:nowrap;
+}
+.next-prayer-pill svg{ width:1.1em; height:1.1em; color:var(--gold-bright); }
+.next-prayer-pill .countdown{ color:var(--gold-bright); font-variant-numeric: tabular-nums; }
+
+.ticker{
+  position:absolute; left:0; right:0; bottom:0;
+  height:34px;
+  display:flex;
+  align-items:center;
+  background:var(--navy-deep);
+  color:var(--ink-white);
+  font-size:.95vw;
+  white-space:nowrap;
+  overflow:hidden;
+}
+.ticker span{
+  display:inline-block;
+  padding-left:100%;
+  animation:scroll-left 28s linear infinite;
+}
+@keyframes scroll-left{
+  0%{ transform:translateX(0); }
+  100%{ transform:translateX(-100%); }
+}

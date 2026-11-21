@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Poster Nasehat</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0b0b0b;
+  }
+  .stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  .layer.show {
+    opacity: 1;
+  }
+  .bg-layer {
+    background-size: cover;
+    background-position: center;
+    filter: blur(3vh) brightness(0.45);
+    transform: scale(1.1);
+  }
+  .fg-layer {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="layer bg-layer" id="bgA"></div>
+    <div class="layer bg-layer" id="bgB"></div>
+    <div class="layer fg-layer" id="fgA"></div>
+    <div class="layer fg-layer" id="fgB"></div>
+  </div>
+
+<script>
+  var FOLDER = '/kumpulan-poster-nasehat-agama/';
+  var IMAGES = ['gambar10.png', 'gambar13.png', 'gambar14.png', 'gambar15.png',  'gambar2.png', 'gambar3.png', 'gambar4.png', 'gambar5.png', 'gambar6.png', 'gambar8.png', 'gambar9.png', 'gambar11.png', 'gambar12.png']
+    .map(function (f) { return FOLDER + f; });
+  var INTERVAL_MS = 30000;
+
+  var idx = 0;
+  var activeIsA = true;
+
+  var bgA = document.getElementById('bgA');
+  var bgB = document.getElementById('bgB');
+  var fgA = document.getElementById('fgA');
+  var fgB = document.getElementById('fgB');
+
+  function showImage(url, useA) {
+    var bg = useA ? bgA : bgB;
+    var fg = useA ? fgA : fgB;
+    var bgOther = useA ? bgB : bgA;
+    var fgOther = useA ? fgB : fgA;
+
+    bg.style.backgroundImage = 'url("' + url + '")';
+    fg.style.backgroundImage = 'url("' + url + '")';
+    bg.classList.add('show');
+    fg.classList.add('show');
+    bgOther.classList.remove('show');
+    fgOther.classList.remove('show');
+  }
+
+  showImage(IMAGES[0], true);
+
+  setInterval(function () {
+    idx = (idx + 1) % IMAGES.length;
+    activeIsA = !activeIsA;
+    showImage(IMAGES[idx], activeIsA);
+  }, INTERVAL_MS);
+</script>
+</body>
+</html>

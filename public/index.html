@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layar Informasi Masjid</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/display.css">
+</head>
+<body>
+
+<div class="status-banner" id="statusBanner">Menyambungkan ulang ke server...</div>
+
+<div class="dashboard" id="dashboard">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">🕌</div>
+      <div class="brand-text">
+        <!-- <div class="brand-eyebrow">Aplikasi</div> -->
+        <div class="brand-name" id="mosqueName">Masjid</div>
+      </div>
+    </div>
+    <div class="time-card">
+      <div class="time-card-clock" id="clock">00:00</div>
+      <div class="time-card-date">
+        <div class="time-card-masehi" id="dateMasehi">-</div>
+        <div class="time-card-hijri" id="dateHijri">-</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="hero-photo" id="heroPhotoA"></div>
+    <div class="hero-photo" id="heroPhotoB"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-slide hero-slide-text" id="heroSlideText">
+      <div class="hero-slide-inner" id="heroSlideInner"></div>
+    </div>
+
+    <div class="hero-slide hero-slide-prayer" id="heroSlidePrayer">
+      <div class="hero-eyebrow">Jadwal Sholat Hari Ini</div>
+      <h1 class="hero-title" id="heroNextLabel">Menuju &mdash;</h1>
+      <div class="hero-countdown" id="heroCountdown">00:00:00</div>
+      <div class="hero-prayer-grid" id="prayerGrid"></div>
+    </div>
+
+    <div class="hero-slide hero-slide-custom" id="heroSlideCustom">
+      <iframe id="heroCustomFrame" title="Slide kustom" src="about:blank"></iframe>
+    </div>
+
+  </section>
+
+
+  <footer class="ticker-bar">
+    <div class="ticker-label"><span>🕌</span> PENGUMUMAN</div>
+    <div class="ticker-track">
+      <div class="ticker-content" id="tickerContent"></div>
+    </div>
+  </footer>
+
+</div>
+
+<div class="pre-adzan-overlay" id="preAdzanOverlay">
+  <div class="pre-adzan-label">Menjelang Waktu</div>
+  <div class="pre-adzan-prayer-name" id="preAdzanPrayerName">-</div>
+  <div class="pre-adzan-countdown" id="preAdzanCountdown">00:00</div>
+</div>
+
+<div class="adzan-overlay" id="adzanOverlay">
+  <div class="adzan-label">Adzan Sedang Berkumandang</div>
+  <div class="adzan-prayer-name" id="adzanPrayerName">-</div>
+</div>
+
+<div class="iqamah-overlay" id="iqamahOverlay">
+  <!-- <div class="iqamah-label">Waktu Iqamah</div> -->
+  <div class="iqamah-countdown" id="iqamahCountdown">00:00</div>
+
+  <div class="iqamah-hadist">
+    <div class="hadist-mark">&ldquo;</div>
+    <div class="bg-hadist-iqamah" id="iqamahHadistBox">
+      <p class="hadist-text" id="iqamahHadistText"></p>
+      <div class="hadist-narrator-iqama" id="iqamahHadistNarrator"></div>
+    </div>
+  </div>
+</div>
+
+<div class="shalat-blank-overlay" id="shalatBlankOverlay"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/prayer-utils.js"></script>
+<script src="js/iqamah-hadist.js"></script>
+<script src="js/display.js"></script>
+</body>
+</html>

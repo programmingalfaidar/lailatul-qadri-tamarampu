@@ -1,0 +1,124 @@
+{
+  "pin": "765018",
+  "mosque": {
+    "name": "Masjid Lailatul Qadri",
+    "city": "Maros",
+    "country": "Indonesia",
+    "latitude": -5.05498,
+    "longitude": 119.5567,
+    "method": 20,
+    "timeCorrections": {
+      "Imsak": 0,
+      "Fajr": 5,
+      "Sunrise": 0,
+      "Dhuhr": 3,
+      "Asr": 1,
+      "Maghrib": 2,
+      "Isha": 1
+    }
+  },
+  "iqamahOffsets": {
+    "Fajr": 11,
+    "Dhuhr": 11,
+    "Asr": 11,
+    "Maghrib": 5,
+    "Isha": 10
+  },
+  "theme": {
+    "primaryColor": "#123a5e",
+    "accentColor": "#f4c430"
+  },
+  "announcements": [
+    {
+      "id": "a1",
+      "type": "umum",
+      "title": "Ahlan wa Sahlan",
+      "body": "Mohon menjaga kebersihan dan ketertiban masjid.",
+      "duration": 25000
+    },
+    {
+      "id": "a1785677969716",
+      "type": "kajian",
+      "title": "Ba'da Subuh Senin-Kamis",
+      "body": "Terbuka Untuk Umum",
+      "duration": 20000,
+      "speaker": "Ustadz Fahruddin ST"
+    },
+    {
+      "id": "a1785677886782",
+      "type": "kajian",
+      "title": "Ba'da Subuh Jum'at-Ahad",
+      "body": "Terbuka Untuk Umum",
+      "duration": 20000,
+      "speaker": "Ustadz Dr H Agus Masykur Lc, M.Fil."
+    },
+    {
+      "id": "a1788732106593",
+      "type": "laporan",
+      "title": "Laporan Keuangan",
+      "body": "",
+      "duration": 25000,
+      "period": "20 November 2026",
+      "saldoAwal": "26,778,000",
+      "pemasukan": "1,992,000",
+      "pengeluaran": "3,850,500",
+      "saldoAkhir": "24,919,500"
+    },
+    {
+      "id": "a5-contoh-hadist",
+      "type": "hadist",
+      "title": "Hadist",
+      "body": "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lain.",
+      "narrator": "HR. Ahmad, Thabrani, Daruquthni",
+      "duration": 20000
+    },
+    {
+      "id": "a12-poster-nasehat",
+      "type": "custom",
+      "title": "Poster Nasehat",
+      "body": "",
+      "file": "slider2.html",
+      "duration": 390000
+    },
+    {
+      "id": "a10-arbain-1",
+      "type": "hadist",
+      "title": "Hadist Arbain Nawawi #1",
+      "body": "Sesungguhnya setiap amalan tergantung niatnya, dan setiap orang akan mendapatkan sesuai apa yang ia niatkan.",
+      "narrator": "HR. Bukhari & Muslim, dari Umar bin Khattab radhiyallahu 'anhu",
+      "duration": 20000
+    },
+    {
+      "id": "a1788732191985",
+      "type": "hadist",
+      "title": "Hadist",
+      "body": "Tidak beriman salah seorang di antara kalian sehingga ia mencintai saudaranya sebagaimana ia mencintai dirinya sendiri.",
+      "duration": 20000,
+      "narrator": "Hadist Arbain Nawawi"
+    },
+    {
+      "id": "a13-kumpulan-video",
+      "type": "custom",
+      "title": "Kumpulan Video",
+      "body": "",
+      "file": "slider4.html",
+      "duration": 25000
+    },
+    {
+      "id": "a14-jam-dunia",
+      "type": "custom",
+      "title": "Jam Dunia",
+      "body": "",
+      "file": "world-clock.html",
+      "duration": 40000
+    },
+    {
+      "id": "a15-hitung-mundur-hari-besar",
+      "type": "custom",
+      "title": "Hitung Mundur Hari Besar Islam",
+      "body": "",
+      "file": "hijri-countdown.html",
+      "duration": 20000
+    }
+  ]
+}

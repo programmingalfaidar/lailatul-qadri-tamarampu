@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Hitung Mundur Hari Besar Islam • Masjid</title>
+<style>
+  :root {
+    --primary: #123a5e;
+    --primary-dark: #081f33;
+    --accent: #f4c430;
+    --text: 	#000000;
+    --text-dim: 	#000000;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    /* background: url('/images/hero6.png') no-repeat center center fixed; */
+    /* background-size: cover; */
+    background: linear-gradient(160deg, #123a2e, #1f6e4f);
+    /* color: var(--text); */
+  }
+
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 3vh 3vw;
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 2.5vh;
+    flex: 0 0 auto;
+  }
+  .header .icon { font-size: 2.6rem; }
+  .header h1 {
+    margin: 0;
+    font-size: 2.3rem;
+    letter-spacing: 0.5px;
+  }
+  .header .sub {
+    color: var(--text-dim);
+    font-size: 5vh;
+    margin-left: auto;
+  }
+
+  /* -------- Satu hari besar tampil bergantian -------- */
+  .stage {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .event {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .event.out {
+    opacity: 0;
+    transform: translateY(2vh);
+  }
+  .event .icon {
+    font-size: 8vh;
+    line-height: 1.2;
+    margin-bottom: 1vh;
+  }
+  .event .title {
+    font-size: 8vh;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .event .note {
+    color: var(--text);
+    font-size: 3.8vh;
+    font-weight: 600;
+    margin-bottom: 1.5vh;
+  }
+  .event .days {
+    font-variant-numeric: tabular-nums;
+    font-size: min(32vh, 26vw);
+    font-weight: 800;
+    line-height: 1;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  }
+  .event .days-label {
+    font-size: 6.6vh;
+    color: var(--text-dim);
+    margin: 1vh 0 2vh;
+    letter-spacing: 1px;
+  }
+  .event .target-date {
+    font-size: 6vh;
+    font-weight: 600;
+  }
+  .event .target-hijri {
+    font-size: 5vh;
+    color: var(--text-dim);
+    margin-top: 0.4vh;
+  }
+  .event.is-today .days { font-size: min(42vh, 20vw); color: var(--text); }
+  .event.is-today .days-label { font-size: 6vh; color: var(--text); }
+
+  /* -------- Penanda urutan -------- */
+  .dots {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 1.6vh;
+    padding-top: 1.5vh;
+  }
+  .dots .dot {
+    width: 1.4vh;
+    height: 1.4vh;
+    border-radius: 50%;
+    background: rgba(245, 245, 240, 0.25);
+    transition: background 0.35s ease, transform 0.35s ease;
+  }
+  .dots .dot.active {
+    background: var(--accent);
+    transform: scale(1.5);
+  }
+
+  /* .footnote {
+    flex: 0 0 auto;
+    margin-top: 2vh;
+    text-align: center;
+    font-size: 5vh;
+    color: var(--text-dim);
+  } */
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <span class="icon">🌙</span>
+    <h1>Hitung Mundur Hari Besar Islam</h1>
+    <span class="sub">&mdash; Kalender Hijriyah</span>
+  </div>
+
+  <div class="stage">
+    <div class="event" id="event">
+      <div class="icon" id="icon"></div>
+      <div class="title" id="title">&hellip;</div>
+      <div class="note" id="note">&nbsp;</div>
+      <div class="days" id="days">&hellip;</div>
+      <div class="days-label" id="daysLabel">HARI LAGI</div>
+      <div class="target-date" id="targetDate">&nbsp;</div>
+      <div class="target-hijri" id="targetHijri">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+
+  <!-- <div class="footnote">
+    *Perkiraan berdasarkan kalender Hijriyah (Ummul Qura). Tanggal resmi mengikuti hasil Sidang Isbat Kementerian Agama RI.
+  </div> -->
+</div>
+
+<script>
+  var SLIDE_FILE = 'hijri-countdown.html';
+  var DEFAULT_SHOW_MS = 5000;      // lama tiap hari besar tampil, bila durasi slide tidak terbaca
+  var FADE_MS = 350;
+
+  var EVENTS = [
+    { key: 'isra',       icon: '✨', title: "Isra Mi'raj",  note: '27 Rajab',      hijriMonth: 7,  hijriDay: 27 },
+    { key: 'ramadan',    icon: '🌙', title: '1 Ramadhan',   note: 'Awal Puasa',    hijriMonth: 9,  hijriDay: 1  },
+    { key: 'syawal',     icon: '🎉', title: '1 Syawal',     note: 'Idul Fitri',    hijriMonth: 10, hijriDay: 1  },
+    { key: 'dzulhijjah', icon: '🕋', title: '1 Dzulhijjah', note: 'Menuju Idul Adha', hijriMonth: 12, hijriDay: 1 }
+  ];
+
+  var DOW = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  var MONTH = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  var HIJRI_MONTH = ['', 'Muharram','Safar',"Rabiul Awal","Rabiul Akhir","Jumadil Awal","Jumadil Akhir","Rajab","Sya'ban","Ramadhan","Syawal","Dzulqa'dah","Dzulhijjah"];
+
+  var current = -1;
+  var eventEl = document.getElementById('event');
+
+  var hijriFormatter = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {
+    year: 'numeric', month: 'numeric', day: 'numeric'
+  });
+
+  function getHijriParts(date) {
+    var out = {};
+    hijriFormatter.formatToParts(date).forEach(function (p) {
+      if (p.type !== 'literal') out[p.type] = parseInt(p.value, 10);
+    });
+    return out;
+  }
+
+  // Cari kemunculan (bulan, tanggal) Hijriyah berikutnya, dimulai dari hari ini.
+  function findNextHijriDate(hijriMonth, hijriDay) {
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    for (var i = 0; i <= 400; i++) {
+      var candidate = new Date(d.getTime());
+      candidate.setDate(candidate.getDate() + i);
+      var hp = getHijriParts(candidate);
+      if (hp.month === hijriMonth && hp.day === hijriDay) {
+        candidate._hijriYear = hp.year;
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  function render() {
+    var ev = EVENTS[current];
+    var target = ev._target;
+    var now = new Date();
+    var isToday = !!target && target.toDateString() === now.toDateString();
+    eventEl.classList.toggle('is-today', isToday);
+    document.getElementById('icon').textContent = ev.icon;
+    document.getElementById('title').textContent = ev.title;
+    document.getElementById('note').textContent = ev.note;
+
+    if (!target) {
+      document.getElementById('days').textContent = '—';
+      document.getElementById('daysLabel').textContent = 'HARI LAGI';
+      document.getElementById('targetDate').textContent = '—';
+      document.getElementById('targetHijri').textContent = '—';
+      return;
+    }
+    if (isToday) {
+      document.getElementById('days').textContent = '🎉';
+      document.getElementById('daysLabel').textContent = 'HARI INI';
+    } else {
+      document.getElementById('days').textContent = Math.ceil((target.getTime() - now.getTime()) / 86400000);
+      document.getElementById('daysLabel').textContent = 'HARI LAGI';
+    }
+    document.getElementById('targetDate').textContent =
+      DOW[target.getDay()] + ', ' + target.getDate() + ' ' + MONTH[target.getMonth()] + ' ' + target.getFullYear();
+    document.getElementById('targetHijri').textContent =
+      ev.hijriDay + ' ' + HIJRI_MONTH[ev.hijriMonth] + ' ' + target._hijriYear + ' H';
+  }
+
+  function buildDots() {
+    var dots = document.getElementById('dots');
+    EVENTS.forEach(function () {
+      var dot = document.createElement('span');
+      dot.className = 'dot';
+      dots.appendChild(dot);
+    });
+  }
+
+  function updateDots() {
+    var dots = document.getElementById('dots').children;
+    for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === current);
+  }
+
+  function show(i) {
+    function swap() {
+      current = i;
+      render();
+      updateDots();
+      eventEl.classList.remove('out');
+    }
+    if (current < 0) { swap(); return; }
+    eventEl.classList.add('out');
+    setTimeout(swap, FADE_MS);
+  }
+
+  async function init() {
+    var showMs = DEFAULT_SHOW_MS;
+    EVENTS.forEach(function (ev) { ev._target = findNextHijriDate(ev.hijriMonth, ev.hijriDay); });
+    try {
+      var settings = await fetch('/api/settings').then(function (r) { return r.json(); });
+      // Bagi rata durasi slide untuk semua hari besar, supaya satu putaran pas selesai.
+      var self = (settings.announcements || []).find(function (a) { return a.file === SLIDE_FILE; });
+      if (self && self.duration) showMs = Math.max(2000, self.duration / EVENTS.length);
+    } catch (e) {}
+    buildDots();
+    show(0);
+    setInterval(function () { show((current + 1) % EVENTS.length); }, showMs);
+  }
+  init();
+</script>
+</body>
+</html>

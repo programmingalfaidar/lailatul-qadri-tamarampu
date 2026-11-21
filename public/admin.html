@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontrol Layar Masjid</title>
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="icon">🕌</div>
+  <h1>Kontrol Layar Masjid</h1>
+  <p class="subtitle">Masukkan PIN pengurus untuk mengelola tampilan.</p>
+  <input type="password" inputmode="numeric" id="pinInput" placeholder="PIN">
+  <button class="btn-primary" id="loginBtn">Masuk</button>
+  <div class="error-text" id="loginError"></div>
+</div>
+
+<div class="wrap hidden" id="mainScreen">
+  <h1 id="headerMosqueName">Kontrol Layar Masjid</h1>
+  <p class="subtitle">Perubahan langsung tampil di layar TV secara real-time.</p>
+
+  <div class="card">
+    <h2>Info Masjid & Lokasi</h2>
+    <label for="fName">Nama Masjid</label>
+    <input type="text" id="fName">
+
+    <label for="fCity">Kota</label>
+    <input type="text" id="fCity" placeholder="cth: Jakarta">
+
+    <label for="fCountry">Negara</label>
+    <input type="text" id="fCountry" placeholder="cth: Indonesia">
+
+    <label for="fLatitude">Lintang (Latitude)</label>
+    <input type="text" id="fLatitude" placeholder="cth: -5.0013">
+
+    <label for="fLongitude">Bujur (Longitude)</label>
+    <input type="text" id="fLongitude" placeholder="cth: 119.5720">
+    <p style="font-size:0.8rem;color:#888;margin:0.3em 0 0;">Jadwal sholat dihitung dari koordinat ini, bukan nama kota, supaya lebih akurat. Cari koordinat lokasi masjid di Google Maps (klik kanan lokasi → koordinatnya muncul).</p>
+
+    <label for="fMethod">Metode Perhitungan</label>
+    <select id="fMethod">
+      <option value="20">Kemenag RI (Indonesia)</option>
+      <option value="11">Singapura (MUIS)</option>
+      <option value="17">Malaysia (JAKIM)</option>
+      <option value="3">Muslim World League</option>
+      <option value="4">Umm Al-Qura, Makkah</option>
+    </select>
+
+    <button class="btn-primary" id="saveMosqueBtn">Simpan Info Masjid</button>
+  </div>
+
+  <div class="card">
+    <h2>Jeda Iqamah (menit setelah adzan)</h2>
+    <div class="offsets-grid">
+      <div><label for="oFajr">Subuh</label><input type="number" id="oFajr" min="0" max="60"></div>
+      <div><label for="oDhuhr">Dzuhur</label><input type="number" id="oDhuhr" min="0" max="60"></div>
+      <div><label for="oAsr">Ashar</label><input type="number" id="oAsr" min="0" max="60"></div>
+      <div><label for="oMaghrib">Maghrib</label><input type="number" id="oMaghrib" min="0" max="60"></div>
+      <div><label for="oIsha">Isya</label><input type="number" id="oIsha" min="0" max="60"></div>
+    </div>
+    <button class="btn-primary" id="saveOffsetsBtn">Simpan Jeda Iqamah</button>
+  </div>
+
+  <div class="card">
+    <h2>Pengumuman & Slide</h2>
+    <div id="announceList"></div>
+
+    <label for="newType">Jenis Konten</label>
+    <select id="newType">
+      <option value="umum">Umum / Pengumuman</option>
+      <option value="kajian">Kajian</option>
+      <option value="infaq">Infaq (ringkas)</option>
+      <option value="laporan">Laporan Keuangan</option>
+      <option value="hadist">Hadist</option>
+      <option value="nasehat">Nasehat</option>
+      <option value="custom">Custom HTML (file)</option>
+    </select>
+
+    <div id="fieldTitleWrap">
+      <label for="newTitle">Judul</label>
+      <input type="text" id="newTitle" placeholder="cth: Kajian Rutin">
+    </div>
+
+    <div id="fieldSpeaker" class="hidden">
+      <label for="newSpeaker">Pemateri & Jadwal</label>
+      <input type="text" id="newSpeaker" placeholder="cth: Ustadz Fahruddin ST · Ba'da Subuh, Senin-Kamis">
+    </div>
+
+    <div id="fieldAmount" class="hidden">
+      <label for="newAmount">Nominal</label>
+      <input type="text" id="newAmount" placeholder="cth: Rp 59.250.000">
+    </div>
+
+    <div id="fieldNarrator" class="hidden">
+      <label for="newNarrator">Perawi</label>
+      <input type="text" id="newNarrator" placeholder="cth: HR. Bukhari Muslim">
+    </div>
+
+    <div id="fieldLaporan" class="hidden">
+      <label for="newPeriod">Periode</label>
+      <input type="text" id="newPeriod" placeholder="cth: Bulan Maret 2025">
+      <label for="newSaldoAwal">Saldo Awal</label>
+      <input type="text" id="newSaldoAwal" placeholder="cth: Rp 3.400.000">
+      <label for="newPemasukan">Pemasukan</label>
+      <input type="text" id="newPemasukan" placeholder="cth: Rp 3.057.000">
+      <label for="newPengeluaran">Pengeluaran</label>
+      <input type="text" id="newPengeluaran" placeholder="cth: Rp 3.950.000">
+      <label for="newSaldoAkhir">Saldo Akhir</label>
+      <input type="text" id="newSaldoAkhir" placeholder="cth: Rp 4.307.000">
+    </div>
+
+    <div id="fieldCustom" class="hidden">
+      <label for="newFile">Nama File HTML</label>
+      <input type="text" id="newFile" placeholder="cth: slider1.html">
+      <p style="font-size:0.8rem;color:#888;margin:0.3em 0 0;">File harus sudah ada di folder <code>public/slides/</code> di server.</p>
+    </div>
+
+    <div id="fieldBodyWrap">
+      <label for="newBody" id="newBodyLabel">Isi Pengumuman</label>
+      <textarea id="newBody" placeholder="Tulis isi pengumuman di sini..."></textarea>
+    </div>
+    <label for="newDuration">Durasi tampil (detik)</label>
+    <input type="number" id="newDuration" min="3" max="60" value="8">
+    <button class="btn-primary" id="addAnnounceBtn">Tambah Pengumuman</button>
+  </div>
+
+  <div class="card">
+    <h2>Keamanan</h2>
+    <label for="newPin">Ganti PIN</label>
+    <input type="password" inputmode="numeric" id="newPin" placeholder="PIN baru (min 4 digit)">
+    <button class="btn-secondary" id="changePinBtn">Ganti PIN</button>
+    <button class="btn-secondary" id="logoutBtn" style="margin-top:0.6em;">Keluar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

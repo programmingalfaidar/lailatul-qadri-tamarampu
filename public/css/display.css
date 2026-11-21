@@ -1,0 +1,707 @@
+html, body {
+  overflow: hidden;
+}
+
+.dashboard {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--primary-dark);
+  overflow: hidden;
+}
+
+/* ---- Slide custom full-screen: sembunyikan chrome lain ---- */
+.dashboard.custom-active .topbar,
+.dashboard.custom-active .feature-row,
+.dashboard.custom-active .ticker-bar {
+  display: none;
+}
+
+/* ---- Top bar ---- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6vmin 2.4vw;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  background: #fff;
+  border-radius: 1.4vmin;
+  padding: 1vmin 1.6vw;
+}
+
+.brand-icon {
+  font-size: 3vmin;
+}
+
+.brand-eyebrow {
+  font-size: 3vmin;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.brand-name {
+  font-size: 5vh;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.15;
+}
+
+.time-card {
+  display: flex;
+  align-items: center;
+  gap: 1.2vw;
+  background: rgba(255, 255, 255, 0.07);
+  border: 0.15vmin solid rgba(244, 196, 48, 0.3);
+  border-radius: 1.4vmin;
+  padding: 1vmin 1.8vw;
+}
+
+.time-card-clock {
+  font-size: 5vh;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.time-card-date {
+  text-align: right;
+  line-height: 1.4;
+  font-size: 4vh;
+}
+
+.time-card-masehi { color: var(--text-dim); }
+.time-card-hijri { color: var(--accent); }
+
+/* ---- Hero ---- */
+.hero {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  background-color: var(--primary-dark);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.hero-photo.show {
+  opacity: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(8, 31, 51, 0.95) 0%, rgba(8, 31, 51, 0.78) 42%, rgba(8, 31, 51, 0.2) 72%, rgba(8, 31, 51, 0.05) 100%);
+  transition: background 0.6s ease;
+}
+
+.hero.prayer-active .hero-overlay {
+  background: rgba(8, 31, 51, 0.9);
+}
+
+.hero.nasehat-active .hero-overlay {
+  background: linear-gradient(160deg, #8a1418 0%, #5c0d10 100%);
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3vmin 6vw;
+  max-width: 62vw;
+  opacity: 0;
+  transform: translateY(1.5vmin);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  pointer-events: none;
+}
+
+.hero-slide.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.hero-eyebrow {
+  font-size: 14vh;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hero-title {
+  font-size: 8vh;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 1vmin 0;
+  line-height: 1.15;
+}
+
+.hero-desc {
+  font-size: 5vmin;
+  color: var(--text);
+  line-height: 1.5;
+  max-width: 100%;
+}
+
+/* ---- Variant: umum (slide selamat datang / pengumuman umum) ---- */
+.variant-umum {
+  max-width: 100%;
+  align-items: center;
+  text-align: center;
+}
+
+.variant-umum .hero-desc {
+  font-size: 10vh;
+}
+
+/* ---- Badge jenis konten ---- */
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6vw;
+  font-size: 5vmin;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.7vmin 1.4vw;
+  border-radius: 999px;
+  margin-bottom: 1.8vmin;
+  background: rgba(244, 196, 48, 0.15);
+  color: var(--accent);
+  border: 0.15vmin solid rgba(244, 196, 48, 0.5);
+}
+
+/* ---- Variant: kajian ---- */
+.kajian-speaker {
+  font-size: 5vmin;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1.2vmin;
+}
+
+/* ---- Variant: infaq & keuangan ---- */
+.infaq-amount {
+  font-size: 5vmin;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  margin: 0.4vmin 0 1.6vmin;
+}
+
+/* ---- Variant: hadist (gaya kutipan) ---- */
+/* .variant-hadist {
+  align-items: center;
+  text-align: center;
+} */
+
+.hadist-mark {
+  font-size: 5vmin;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 0.5;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.hadist-text {
+  font-size: 5vmin;
+  font-style: italic;
+  color: var(--accent);
+  line-height: 1.55;
+  font-family: Georgia, 'Times New Roman', serif;
+  max-width: 46vw;
+}
+
+.hadist-narrator {
+  font-size: 5vmin;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 1.8vmin;
+}
+
+.hadist-narrator-iqama {
+  font-size: 5vmin;
+  font-weight: 600;
+  color: black;
+  margin-top: 1.8vmin;
+}
+
+/* ---- Variant: nasehat (background merah penuh) ---- */
+.variant-nasehat {
+  align-items: center;
+  text-align: center;
+  max-width: 78vw;
+}
+
+.nasehat-text {
+  font-size: 5vmin;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.4;
+}
+
+/* ---- Variant: laporan keuangan ---- */
+.laporan-period {
+  font-size: 5vmin;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 2.4vmin;
+}
+
+.laporan-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6vmin;
+  width: 100%;
+  max-width: 58vw;
+}
+
+.laporan-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 0.2vmin solid rgba(0, 0, 0, 0.15);
+  border-radius: 1.2vmin;
+  padding: 2vmin 2.4vw;
+}
+
+.laporan-label {
+  font-size: 5vmin;
+  font-weight: 700;
+  color: #000;
+}
+
+.laporan-value {
+  font-size: 5vmin;
+  font-weight: 800;
+  color: #000;
+  font-variant-numeric: tabular-nums;
+}
+
+.laporan-row.laporan-final {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.laporan-row.laporan-final .laporan-label,
+.laporan-row.laporan-final .laporan-value {
+  color: var(--text);
+}
+
+/* ---- Hero: slide jadwal sholat (lebar penuh + grid) ---- */
+.hero-slide-prayer {
+  max-width: 100%;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---- Slide kustom: HTML terpisah dimuat lewat iframe ---- */
+.hero-slide-custom {
+  max-width: 100%;
+  padding: 0;
+}
+
+.hero-slide-custom iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.hero-slide-prayer .hero-title {
+  font-size: 5vmin;
+}
+
+.hero-countdown {
+  font-size: 10vh;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  margin: 0.5vmin 0 3vmin;
+}
+
+.hero-prayer-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1vw;
+  width: 100%;
+  max-width: 84vw;
+}
+
+.hero-prayer-grid .prayer-box {
+  font-size: 4vmin;
+  font-weight: 600;
+  color: #000;
+  line-height: 1.4;
+  background: #fff;
+  border: 0.15vmin solid rgba(0, 0, 0, 0.2);
+  border-radius: 1vmin;
+  padding: 1.6vmin 0.5vw;
+  transition: background 0.4s, border-color 0.4s, color 0.4s;
+}
+
+.hero-prayer-grid .prayer-box.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text);
+}
+
+.hero-prayer-grid .label {
+  font-size: 5vmin;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero-prayer-grid .time {
+  font-size: 5vmin;
+  font-weight: 700;
+  margin-top: 0.6vmin;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Feature row ---- */
+.feature-row {
+  display: flex;
+  gap: 1vw;
+  padding: 1.6vmin 2vw;
+  flex-shrink: 0;
+}
+
+.feature-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1.2vmin;
+  padding: 1.4vmin 1.2vw;
+  min-width: 0;
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  width: 5vmin;
+  height: 5vmin;
+  border-radius: 1vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5vmin;
+  color: var(--primary-dark);
+}
+
+.feature-card.gold .feature-icon { background: var(--accent); }
+.feature-card.green .feature-icon { background: var(--primary); color: var(--text); }
+
+.feature-text {
+  min-width: 0;
+}
+
+.feature-title {
+  font-size: 5vmin;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.feature-sub {
+  font-size: 5vmin;
+  color: var(--text-dim);
+  margin-top: 0.3vmin;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Ticker ---- */
+.ticker-bar {
+  display: flex;
+  align-items: stretch;
+  background: #fff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ticker-label {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6vw;
+  background: var(--primary);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 5vmin;
+  padding: 1.4vmin 1.6vw;
+  letter-spacing: 0.04em;
+}
+
+.ticker-track {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-content {
+  display: inline-block;
+  padding-left: 100%;
+  color: var(--primary-dark);
+  font-size: 8vh;
+  font-weight: 500;
+  animation: ticker-scroll 25s linear infinite;
+}
+
+.ticker-sep {
+  color: var(--accent);
+  font-weight: 700;
+  padding: 0 1.2vw;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* ---- Menjelang adzan overlay (1 menit sebelum waktu sholat) ---- */
+.pre-adzan-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, #7a5c00, var(--accent));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.pre-adzan-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pre-adzan-label {
+  font-size: 10vh;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.pre-adzan-prayer-name {
+  font-size: 10vh;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin: 1vmin 0;
+}
+
+.pre-adzan-countdown {
+  font-size: 10vh;
+  font-weight: 800;
+  color: var(--primary-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  animation: pre-adzan-pulse 1s ease-in-out infinite;
+}
+
+@keyframes pre-adzan-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* ---- Adzan sedang berjalan overlay ---- */
+.adzan-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, #123a2e, #1f6e4f);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.adzan-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.adzan-label {
+  font-size: 10vh;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+  animation: adzan-pulse 1.6s ease-in-out infinite;
+}
+
+.adzan-prayer-name {
+  font-size: 10vh;
+  font-weight: 800;
+  color: #fff;
+  margin: 1vmin 0;
+}
+
+@keyframes adzan-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ---- Iqamah overlay ---- */
+.iqamah-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, var(--primary-dark), var(--primary));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1vh;
+  padding: 3vh 4vw;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.iqamah-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* .iqamah-label {
+  font-size: 8vh;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+} */
+
+.iqamah-countdown {
+  font-size: min(57vh, 44vw);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.8; /* rapatkan boks ke tinggi angka, sisa ruang dipakai hadist */
+  text-align: center;
+  color: var(--accent);
+}
+
+/* Tinggi tetap: hitung mundur tidak bergeser walau panjang hadist berbeda-beda */
+.iqamah-hadist {
+  width: 100%;
+  flex: 0 0 36vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.iqamah-hadist .hadist-mark {
+  font-size: 8vh;
+  line-height: 0.6;
+}
+
+.iqamah-overlay .iqamah-hadist .bg-hadist-iqamah {
+  padding: 10px 1px;
+  border-radius: 1vh;
+  /* background: #F0FFFF; */
+  transition: opacity 0.5s ease;
+}
+
+.iqamah-overlay .iqamah-hadist .bg-hadist-iqamah.is-fading {
+  opacity: 0;
+}
+
+.iqamah-hadist .hadist-text {
+  font-size: min(4.8vh, 2.8vw);
+  line-height: 1.4;
+  max-width: 100%;
+  margin: 0;
+  color: #000000;
+  text-wrap: balance;
+}
+
+.iqamah-hadist .hadist-narrator {
+  font-size: min(4.4vh, 2.5vw);
+  margin-top: 1.2vh;
+}
+
+/* ---- Layar gambar polos saat sholat berlangsung (agar tidak mengganggu) ---- */
+.shalat-blank-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000 url('/images/hero2.jpeg') center/cover no-repeat;
+  z-index: 70;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.shalat-blank-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---- Offline / error banner ---- */
+.status-banner {
+  position: fixed;
+  top: 1vmin;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #b3261e;
+  color: #fff;
+  font-size: 5vmin;
+  padding: 0.8vmin 2vw;
+  border-radius: 1vmin;
+  z-index: 60;
+  display: none;
+}
+
+.status-banner.show {
+  display: block;
+}
+
+/* ---- Pengaman layar sempit/portrait: grid 7 kolom jadi 2 baris ---- */
+@media (max-aspect-ratio: 4/3) {
+  .hero-prayer-grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 96vw;
+  }
+
+  .hero-prayer-grid .prayer-box:last-child {
+    grid-column: 2 / span 2;
+  }
+
+  .hero-slide {
+    max-width: 92vw;
+  }
+
+  .hero-desc,
+  .hadist-text {
+    max-width: 62vw;
+  }
+}

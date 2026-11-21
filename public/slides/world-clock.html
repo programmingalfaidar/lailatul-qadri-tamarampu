@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Jam Dunia • Masjid</title>
+<style>
+  :root {
+    --primary: #123a5e;
+    --primary-dark: #081f33;
+    --accent: #f4c430;
+    --text: #f5f5f0;
+    --text-dim: #cfd8e0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+
+    /* background: url('/images/hero6.png') no-repeat center center fixed;
+    background-size: cover; */
+     background: linear-gradient(160deg, #123a2e, #1f6e4f);
+     color: var(--accent);
+  }
+
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 3vh 3vw;
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex: 0 0 auto;
+  }
+  .header .icon { font-size: 2.4rem; }
+  .header h1 {
+    margin: 0;
+    font-size: 2.1rem;
+    letter-spacing: 0.5px;
+  }
+  .header .sub {
+    color: var(--primary-dark);
+    font-size: 3.1rem;
+  }
+
+  /* -------- Satu kota tampil bergantian -------- */
+  .stage {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .clock.out {
+    opacity: 0;
+    transform: translateY(2vh);
+  }
+  .clock .badge {
+    background: var(--accent);
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: 2.6vh;
+    padding: 0.6vh 2.4vh;
+    border-radius: 999px;
+    margin-bottom: 2vh;
+  }
+  .clock .badge.hidden { visibility: hidden; }
+  .clock .place {
+    display: flex;
+    align-items: center;
+    gap: 2vh;
+  }
+  .clock .flag { font-size: 9vh; }
+  .clock .city {
+    font-size: 11vh;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--primary-dark);
+  }
+  .clock .daynight { font-size: 7vh; }
+  .clock .country {
+    color: var(--primary-dark);
+    font-size: 4vh;
+    margin-top: 0.5vh;
+  }
+  .clock .time {
+    font-variant-numeric: tabular-nums;
+    font-size: min(42vh, 34vw);
+    color: var(--primary-dark);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-top: 2vh;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  }
+  .clock .date {
+    margin-top: 2vh;
+    font-size: 4.2vh;
+    color: var(--primary-dark);
+  }
+
+  /* -------- Penanda urutan kota -------- */
+  .dots {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 1.6vh;
+    padding-top: 1.5vh;
+  }
+  .dots .dot {
+    width: 1.4vh;
+    height: 1.4vh;
+    border-radius: 50%;
+    background: rgba(245, 245, 240, 0.25);
+    transition: background 0.35s ease, transform 0.35s ease;
+  }
+  .dots .dot.active {
+    background: var(--accent);
+    transform: scale(1.5);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <span class="icon">🌍</span>
+    <!-- <h1>Jam Dunia</h1> -->
+    <span class="sub">&mdash; Waktu real-time berbagai kota</span>
+  </div>
+
+  <div class="stage">
+    <div class="clock" id="clock">
+      <div class="badge hidden" id="badge">📍 Lokasi Masjid</div>
+      <div class="place">
+        <span class="flag" id="flag"></span>
+        <span class="city" id="city">&hellip;</span>
+        <span class="daynight" id="daynight"></span>
+      </div>
+      <div class="country" id="country">&nbsp;</div>
+      <div class="time" id="time">--:--</div>
+      <div class="date" id="date">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+  var MOSQUE_TZ = 'Asia/Makassar'; // WITA — sesuai lokasi masjid (Maros, Sulawesi Selatan)
+  var SLIDE_FILE = 'world-clock.html';
+  var DEFAULT_SHOW_MS = 4000;      // lama tiap kota tampil, bila durasi slide tidak terbaca
+  var FADE_MS = 350;
+
+  // Urutan tampil: lokasi masjid dulu, lalu kota-kota dunia.
+  var PLACES = [
+    { city: 'Maros',     country: 'Indonesia (WITA)', tz: MOSQUE_TZ,          flag: '🇮🇩', mosque: true },
+    { city: 'Jakarta',   country: 'Indonesia (WIB)',  tz: 'Asia/Jakarta',     flag: '🇮🇩' },
+    { city: 'Jayapura',  country: 'Indonesia (WIT)',  tz: 'Asia/Jayapura',    flag: '🇮🇩' },
+    { city: 'Mekkah',    country: 'Arab Saudi',       tz: 'Asia/Riyadh',      flag: '🇸🇦' },
+    { city: 'Kairo',     country: 'Mesir',            tz: 'Africa/Cairo',     flag: '🇪🇬' },
+    { city: 'Istanbul',  country: 'Turki',            tz: 'Europe/Istanbul',  flag: '🇹🇷' },
+    { city: 'London',    country: 'Inggris',          tz: 'Europe/London',    flag: '🇬🇧' },
+    { city: 'New York',  country: 'Amerika Serikat',  tz: 'America/New_York', flag: '🇺🇸' },
+    { city: 'Tokyo',     country: 'Jepang',           tz: 'Asia/Tokyo',       flag: '🇯🇵' },
+    { city: 'Sydney',    country: 'Australia',        tz: 'Australia/Sydney', flag: '🇦🇺' }
+  ];
+
+  var DOW = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  var MONTH = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+  var current = -1;
+  var clockEl = document.getElementById('clock');
+
+  function partsFor(tz, now) {
+    var dtf = new Intl.DateTimeFormat('en-GB', {
+      timeZone: tz, hour12: false,
+      hour: '2-digit', minute: '2-digit',
+      weekday: 'short', day: 'numeric', month: 'numeric', year: 'numeric'
+    });
+    var out = {};
+    dtf.formatToParts(now).forEach(function (p) { out[p.type] = p.value; });
+    return out;
+  }
+
+  // Intl weekday short (en-GB) -> index Minggu..Sabtu
+  var WD_MAP = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  function weekdayIndex(short) { return WD_MAP[short] !== undefined ? WD_MAP[short] : 0; }
+
+  function render() {
+    var c = PLACES[current];
+    var p = partsFor(c.tz, new Date());
+    var hour = parseInt(p.hour, 10);
+    var isNight = hour < 6 || hour >= 18;
+    clockEl.classList.toggle('is-night', isNight);
+    document.getElementById('badge').classList.toggle('hidden', !c.mosque);
+    document.getElementById('flag').textContent = c.flag;
+    document.getElementById('city').textContent = c.city;
+    document.getElementById('daynight').textContent = isNight ? '🌙' : '☀️';
+    document.getElementById('country').textContent = c.country;
+    document.getElementById('time').textContent = p.hour + ':' + p.minute;
+    document.getElementById('date').textContent =
+      DOW[weekdayIndex(p.weekday)] + ', ' + p.day + ' ' + MONTH[parseInt(p.month, 10) - 1] + ' ' + p.year;
+  }
+
+  function buildDots() {
+    var dots = document.getElementById('dots');
+    PLACES.forEach(function () {
+      var dot = document.createElement('span');
+      dot.className = 'dot';
+      dots.appendChild(dot);
+    });
+  }
+
+  function updateDots() {
+    var dots = document.getElementById('dots').children;
+    for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === current);
+  }
+
+  function show(i) {
+    function swap() {
+      current = i;
+      render();
+      updateDots();
+      clockEl.classList.remove('out');
+    }
+    if (current < 0) { swap(); return; }
+    clockEl.classList.add('out');
+    setTimeout(swap, FADE_MS);
+  }
+
+  async function init() {
+    var showMs = DEFAULT_SHOW_MS;
+    try {
+      var settings = await fetch('/api/settings').then(function (r) { return r.json(); });
+      var mosque = settings.mosque || {};
+      if (mosque.city) PLACES[0].city = mosque.city;
+      if (mosque.country) PLACES[0].country = mosque.country + ' (WITA)';
+      // Bagi rata durasi slide untuk semua kota, supaya satu putaran pas selesai.
+      var self = (settings.announcements || []).find(function (a) { return a.file === SLIDE_FILE; });
+      if (self && self.duration) showMs = Math.max(2000, self.duration / PLACES.length);
+    } catch (e) {}
+    buildDots();
+    show(0);
+    setInterval(render, 1000);
+    setInterval(function () { show((current + 1) % PLACES.length); }, showMs);
+  }
+  init();
+</script>
+</body>
+</html>
